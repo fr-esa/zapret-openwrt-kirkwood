@@ -63,7 +63,10 @@ jobs:
         run: |
           cd "$SDK_DIR"
           ./scripts/feeds update -a
-          ./scripts/feeds install -a  # можно заменить на конкретные пакеты: zapret luci-base luci-app-zapret
+          ./scripts/feeds install luci
+          ./scripts/feeds install luci-base
+          ./scripts/feeds install luci-app-zapret
+          ./scripts/feeds install nftables curl gzip coreutils coreutils-sort coreutils-sleep libnetfilter-queue libcap zlib
 
 #      - name: Update and install feeds
 #        run: |
