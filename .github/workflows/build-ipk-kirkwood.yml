@@ -16,7 +16,7 @@ jobs:
       SDK_FILE: openwrt-sdk-24.10.2-kirkwood-generic_gcc-13.3.0_musl_eabi.Linux-x86_64.tar.zst
       OPENWRT_SDK_URL: https://downloads.openwrt.org/releases/24.10.2/targets/kirkwood/generic/openwrt-sdk-24.10.2-kirkwood-generic_gcc-13.3.0_musl_eabi.Linux-x86_64.tar.zst
       PACKAGE_NAME: zapret
-  steps:
+    steps:
       - name: Checkout fork
         uses: actions/checkout@v4
 
