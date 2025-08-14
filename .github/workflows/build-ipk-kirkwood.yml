@@ -34,13 +34,16 @@ jobs:
           mkdir -p $HOME/openwrt && cd $HOME/openwrt
           curl -L -O "$OPENWRT_SDK_URL"
           tar -I zstd -xf "$SDK_FILE"
-          echo "SDK_DIR=$(echo $HOME/openwrt/openwrt-sdk-*)" >> $GITHUB_ENV
+          # находим каталог SDK
+          SDK_DIR=$(find $HOME/openwrt -maxdepth 1 -type d -name "openwrt-sdk-*")
+          echo "SDK_DIR=$SDK_DIR" >> $GITHUB_ENV
 
       - name: (Optional) Cache dl/
         uses: actions/cache@v4
         with:
           path: ~/.openwrt-dl
           key: dl-${{ env.OPENWRT_VERSION }}
+
       - name: Link dl/ cache
         run: |
           mkdir -p ~/.openwrt-dl
