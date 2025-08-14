@@ -58,7 +58,12 @@ jobs:
         run: |
           cd "$SDK_DIR"
           make defconfig
-          
+
+      - name: Update and install feeds
+        run: |
+          cd "$SDK_DIR"
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
       - name: Build zapret .ipk
         run: |
           set -eux
