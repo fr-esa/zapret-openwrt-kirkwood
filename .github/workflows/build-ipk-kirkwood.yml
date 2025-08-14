@@ -82,3 +82,16 @@ jobs:
           path: |
             ${{ env.OUT_BASE }}/**/zapret*.ipk
             ${{ env.OUT_BASE }}/**/luci-app-zapret*.ipk
+
+       - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ github.run_number }}
+          name: "zapret-kirkwood build ${{ github.run_number }}"
+          draft: false
+          prerelease: false
+          files: |
+            ${{ env.OUT_BASE }}/**/zapret*.ipk
+            ${{ env.OUT_BASE }}/**/luci-app-zapret*.ipk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
