@@ -54,6 +54,11 @@ jobs:
           set -eux
           cp -a ./ $SDK_DIR/package/zapret
 
+      - name: Generate default .config for SDK
+        run: |
+          cd "$SDK_DIR"
+          make defconfig
+          
       - name: Build zapret .ipk
         run: |
           set -eux
