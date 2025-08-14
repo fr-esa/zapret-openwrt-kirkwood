@@ -41,7 +41,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.openwrt-dl
-          key: dl-${{ env.OPENWRT_VERSION }}
+          key: dl-${{ env.OPENWRT_VERSION}}
 
       - name: Link dl/ cache
         run: |
@@ -54,23 +54,20 @@ jobs:
           cp -a ./ $SDK_DIR/package/zapret
           cp -a luci-app-zapret $SDK_DIR/package/
 
-      - name: Generate default .config
+      - name: Generate default .config and enable packages
         run: |
           cd "$SDK_DIR"
           make defconfig
+          # Включаем zapret и luci-app-zapret
+          echo "CONFIG_PACKAGE_zapret=y" >> .config
+          echo "CONFIG_PACKAGE_luci-app-zapret=y" >> .config
+          make defconfig
 
-      - name: Update and install only needed feeds
+      - name: Update and install feeds
         run: |
           cd "$SDK_DIR"
           ./scripts/feeds update -a
           ./scripts/feeds install -a
-
-#      - name: Update and install feeds
-#        run: |
-#          cd "$SDK_DIR"
-#          ./scripts/feeds update packages luci
-#          ./scripts/feeds install packages luci
-#          ./scripts/feeds install nftables curl gzip coreutils coreutils-sort coreutils-sleep libnetfilter-queue libcap zlib
 
       - name: Build zapret and luci-app-zapret
         run: |
