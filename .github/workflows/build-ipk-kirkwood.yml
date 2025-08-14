@@ -1,4 +1,4 @@
-name: Build OpenWrt IPK (kirkwood)
+name: Build zapret-openwrt (kirkwood)
 
 on:
   push:
@@ -13,13 +13,12 @@ jobs:
       TARGET: kirkwood
       SUBTARGET: generic
       OPENWRT_VERSION: 24.10.2
-      # Файл SDK для x86_64 runner'а GitHub:
       SDK_FILE: openwrt-sdk-24.10.2-kirkwood-generic_gcc-13.3.0_musl_eabi.Linux-x86_64.tar.zst
       OPENWRT_SDK_URL: https://downloads.openwrt.org/releases/24.10.2/targets/kirkwood/generic/openwrt-sdk-24.10.2-kirkwood-generic_gcc-13.3.0_musl_eabi.Linux-x86_64.tar.zst
-      PACKAGE_NAME: hello-kirkwood
+      PACKAGE_NAME: zapret
 
     steps:
-      - name: Checkout
+      - name: Checkout fork
         uses: actions/checkout@v4
 
       - name: Install host prerequisites
@@ -35,11 +34,9 @@ jobs:
           mkdir -p $HOME/openwrt && cd $HOME/openwrt
           curl -L -O "$OPENWRT_SDK_URL"
           tar -I zstd -xf "$SDK_FILE"
-          # находим каталог SDK
-          SDK_DIR=$(find $HOME/openwrt -maxdepth 1 -type d -name "openwrt-sdk-*")
-          echo "SDK_DIR=$SDK_DIR" >> $GITHUB_ENV
+          echo "SDK_DIR=$(echo $HOME/openwrt/openwrt-sdk-*)" >> $GITHUB_ENV
 
-      - name: (Optional) Cache downloads (dl/)
+      - name: (Optional) Cache dl/
         uses: actions/cache@v4
         with:
           path: ~/.openwrt-dl
@@ -49,18 +46,12 @@ jobs:
           mkdir -p ~/.openwrt-dl
           ln -sfn ~/.openwrt-dl "$SDK_DIR/dl"
 
-      - name: Copy your package into SDK
+      - name: Copy zapret package into SDK
         run: |
           set -eux
-          mkdir -p "$SDK_DIR/package/mypkgs"
-          cp -a hello-kirkwood "$SDK_DIR/package/mypkgs/"
-          
-      - name: Generate default .config for SDK
-        run: |
-          cd "$SDK_DIR"
-          make defconfig
-          
-      - name: Build .ipk
+          cp -a ./ $SDK_DIR/package/zapret
+
+      - name: Build zapret .ipk
         run: |
           set -eux
           cd "$SDK_DIR"
@@ -68,9 +59,8 @@ jobs:
           echo "OUT_BASE=$SDK_DIR/bin/packages" >> $GITHUB_ENV
           find "$SDK_DIR/bin/packages" -maxdepth 3 -name "*.ipk" -print
 
-      - name: Upload IPK artifacts
+      - name: Upload zapret IPK artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ipk-arm_xscale
+          name: zapret-ipk-arm_xscale
           path: ${{ env.OUT_BASE }}/**/*.ipk
-
