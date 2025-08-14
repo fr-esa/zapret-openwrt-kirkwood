@@ -63,9 +63,6 @@ jobs:
         run: |
           cd "$SDK_DIR"
           ./scripts/feeds update -a
-#          ./scripts/feeds install luci
-#          ./scripts/feeds install luci-base
-#          ./scripts/feeds install luci-app-zapret
           ./scripts/feeds install -a
 
 #      - name: Update and install feeds
