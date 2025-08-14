@@ -53,6 +53,7 @@ jobs:
         run: |
           set -eux
           cp -a ./ $SDK_DIR/package/zapret
+          cp -a luci-app-zapret $SDK_DIR/package/
 
       - name: Generate default .config for SDK
         run: |
@@ -64,11 +65,13 @@ jobs:
           cd "$SDK_DIR"
           ./scripts/feeds update -a
           ./scripts/feeds install -a
-      - name: Build zapret .ipk
+
+            - name: Build zapret and luci-app-zapret
         run: |
           set -eux
           cd "$SDK_DIR"
-          make package/${PACKAGE_NAME}/compile -j$(nproc) V=sc
+          make package/zapret/compile -j$(nproc) V=sc
+          make package/luci-app-zapret/compile -j$(nproc) V=sc
           echo "OUT_BASE=$SDK_DIR/bin/packages" >> $GITHUB_ENV
           find "$SDK_DIR/bin/packages" -maxdepth 3 -name "*.ipk" -print
 
@@ -76,4 +79,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: zapret-ipk-arm_xscale
-          path: ${{ env.OUT_BASE }}/**/*.ipk
+          path: |
+            ${{ env.OUT_BASE }}/**/zapret*.ipk
+            ${{ env.OUT_BASE }}/**/luci-app-zapret*.ipk
