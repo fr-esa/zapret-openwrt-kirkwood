@@ -66,7 +66,7 @@ jobs:
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
-            - name: Build zapret and luci-app-zapret
+      - name: Build zapret and luci-app-zapret
         run: |
           set -eux
           cd "$SDK_DIR"
