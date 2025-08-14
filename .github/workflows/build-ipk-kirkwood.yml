@@ -63,8 +63,8 @@ jobs:
       - name: Update and install feeds
         run: |
           cd "$SDK_DIR"
-          ./scripts/feeds update -a
-          ./scripts/feeds install -a
+          ./scripts/feeds update packages
+          ./scripts/feeds install nftables curl gzip coreutils coreutils-sort coreutils-sleep libnetfilter-queue libcap zlib
 
       - name: Build zapret and luci-app-zapret
         run: |
