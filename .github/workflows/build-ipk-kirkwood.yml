@@ -59,12 +59,18 @@ jobs:
           cd "$SDK_DIR"
           make defconfig
 
-      - name: Update and install feeds
+      - name: Update and install only needed feeds
         run: |
           cd "$SDK_DIR"
-          ./scripts/feeds update packages luci
-          ./scripts/feeds install packages luci
-          ./scripts/feeds install nftables curl gzip coreutils coreutils-sort coreutils-sleep libnetfilter-queue libcap zlib
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a  # можно заменить на конкретные пакеты: zapret luci-base luci-app-zapret
+
+#      - name: Update and install feeds
+#        run: |
+#          cd "$SDK_DIR"
+#          ./scripts/feeds update packages luci
+#          ./scripts/feeds install packages luci
+#          ./scripts/feeds install nftables curl gzip coreutils coreutils-sort coreutils-sleep libnetfilter-queue libcap zlib
 
       - name: Build zapret and luci-app-zapret
         run: |
