@@ -54,7 +54,12 @@ jobs:
           set -eux
           mkdir -p "$SDK_DIR/package/mypkgs"
           cp -a hello-kirkwood "$SDK_DIR/package/mypkgs/"
-
+          
+      - name: Generate default .config for SDK
+        run: |
+          cd "$SDK_DIR"
+          make defconfig
+          
       - name: Build .ipk
         run: |
           set -eux
